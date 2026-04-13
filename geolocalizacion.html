@@ -1,0 +1,124 @@
+{% extends "alumno.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>API de Geolocalizacion</h2>
+    <p>Prueba aqui mismo los endpoints de geolocalizacion.</p>
+</div>
+
+<div class="geo-grid">
+    <div class="card">
+        <h3>Buscar por IP</h3>
+        <form id="form-ip" class="form-group">
+            <label for="ip">IP (opcional)</label>
+            <input id="ip" name="ip" type="text" placeholder="Ej. 8.8.8.8">
+            <button type="submit" class="btn-primary">Consultar IP</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Buscar por direccion</h3>
+        <form id="form-direccion" class="form-group">
+            <label for="direccion">Direccion</label>
+            <input id="direccion" name="direccion" type="text" placeholder="Ej. Reforma 305, CDMX" required>
+            <button type="submit" class="btn-primary">Consultar direccion</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Clima actual por coordenadas</h3>
+        <form id="form-clima" class="form-group">
+            <label for="lat">Latitud</label>
+            <input id="lat" name="lat" type="number" step="any" placeholder="Ej. 19.4326" required>
+
+            <label for="lon">Longitud</label>
+            <input id="lon" name="lon" type="number" step="any" placeholder="Ej. -99.1332" required>
+
+            <button type="submit" class="btn-primary">Consultar clima</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Resumen de clima</h3>
+    <div id="clima-resumen">Aun sin consulta de clima.</div>
+</div>
+
+<div class="card">
+    <h3>Respuesta JSON</h3>
+    <pre id="resultado-json" class="geo-json">{ "ok": true }</pre>
+</div>
+
+<script>
+    const out = document.getElementById("resultado-json");
+    const resumenClima = document.getElementById("clima-resumen");
+
+    function renderResult(status, data) {
+        out.textContent = JSON.stringify({ status: status, data: data }, null, 2);
+    }
+
+    function renderClima(data) {
+        if (!data || !data.ok) {
+            resumenClima.textContent = "No hay datos de clima para mostrar.";
+            return;
+        }
+
+        resumenClima.textContent =
+            `Temperatura: ${data.temperatura} ${data.unidades?.temperatura || ""} | ` +
+            `Sensacion: ${data.sensacion_termica} ${data.unidades?.sensacion_termica || ""} | ` +
+            `Humedad: ${data.humedad_relativa} ${data.unidades?.humedad_relativa || ""} | ` +
+            `Viento: ${data.velocidad_viento} ${data.unidades?.velocidad_viento || ""} | ` +
+            `Zona: ${data.zona_horaria || "N/D"}`;
+    }
+
+    document.getElementById("form-ip").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const ip = document.getElementById("ip").value.trim();
+        const endpoint = ip
+            ? `/api/v1/geolocalizacion/ip?ip=${encodeURIComponent(ip)}`
+            : "/api/v1/geolocalizacion/ip";
+
+        try {
+            const res = await fetch(endpoint);
+            const data = await res.json();
+            renderResult(res.status, data);
+        } catch (err) {
+            renderResult(500, { ok: false, error: "No se pudo conectar con la API." });
+        }
+    });
+
+    document.getElementById("form-direccion").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const direccion = document.getElementById("direccion").value.trim();
+
+        try {
+            const res = await fetch("/api/v1/geolocalizacion/direccion", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ direccion: direccion })
+            });
+            const data = await res.json();
+            renderResult(res.status, data);
+        } catch (err) {
+            renderResult(500, { ok: false, error: "No se pudo conectar con la API." });
+        }
+    });
+
+    document.getElementById("form-clima").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const lat = document.getElementById("lat").value.trim();
+        const lon = document.getElementById("lon").value.trim();
+
+        try {
+            const endpoint = `/api/v1/clima/actual?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`;
+            const res = await fetch(endpoint);
+            const data = await res.json();
+            renderResult(res.status, data);
+            renderClima(data);
+        } catch (err) {
+            renderResult(500, { ok: false, error: "No se pudo conectar con la API." });
+            renderClima(null);
+        }
+    });
+</script>
+{% endblock %}

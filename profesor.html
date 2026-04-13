@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Control de Materiales</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .user-card {
+            width: 500px;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .rol.profesor {
+            background-color: #6a00f4;
+            padding: 6px 12px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" width="50" alt="Logo">
+        <div class="header-text">
+            <h1>Sistema de Control de Materiales</h1>
+            <p>Proyecto Integrador II - 7EE2</p>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <a href="{{ url_for('home') }}">Cerrar sesion</a>
+    <a href="{{ url_for('prestamosP') }}">Prestamos</a>
+    <a href="{{ url_for('materialesP') }}">Materiales</a>
+    <a href="{{ url_for('pagosP') }}">Pagos</a>
+    <a href="{{ url_for('geolocalizacionP') }}">Geolocalizacion</a>
+</nav>
+
+<center><div class="user-card">
+    <h3>👤 Usuario: {{ correo }}</h3>
+
+    {% if rol == "profesor" %}
+        <p class="rol profesor">Rol: Profesor</p>
+    {% endif %}
+</div></center>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar Sesión</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(-45deg, 
+                #00FF7F,   /* Verde Primavera */
+                #3D8B74,   /* Juniper */
+                #3D8B74,
+                #001F3F,
+                #001F3F,   /* Azul Marino */
+                #a0e8be    /* Verde complementario suave */
+            );
+            background-size: 400% 400%;
+            animation: gradientMove 30s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 220px;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .login-container {
+            width: 420px;
+            background: white;
+            padding: 40px 35px;
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .login-container img {
+            width: 220px;
+            margin-bottom: 20px;
+        }
+
+        .alert-message {
+            background-color: #f8d7da;
+            color: #0f0457;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            transition: 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #6d2c4f;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(109, 44, 79, 0.2);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            background-color: #6d2c4f;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #8a3d63;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(109, 44, 79, 0.3);
+        }
+
+        .login-links {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .login-links a {
+            text-decoration: none;
+            color: #6d2c4f;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                width: 90%;
+                padding: 30px 20px;
+            }
+        }
+
+        .btn-google {
+            margin-top: 5px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            background: center;
+            border: 1px solid #ddd;
+            color: #444;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s ease;
+        }
+
+        .btn-google img {
+            width: 25px;
+        }
+
+        .btn-google:hover {
+            background-color: #f5f5f5;
+            background: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transform: translateY(2px);
+        }
+
+        .social-section {
+            margin-top: 30px;
+            text-align: right;
+        }
+
+        .social-section p {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 18px;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f2f2f2;
+            transition: 0.3s ease;
+        }
+
+        .icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    
+<div class="login-container">
+    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo Universidad" width="70px">
+
+    <form method="POST" action="{{ url_for('login') }}">
+
+    <div class="input-group">
+        <input type="email" name="correo" placeholder="Correo" required>
+    </div>
+
+    <div class="input-group">
+        <input type="password" name="password" placeholder="Contraseña" required>
+    </div>
+
+    <button type="submit" class="btn-login">Ingresar</button>
+
+        <a href="{{ url_for('login_google') }}" class="btn-google">
+            <img src="https://cdn-icons-png.flaticon.com/512/281/281764.png" alt="Google" width="15px">
+            Inicio sesión Google
+        </a>
+    </form>
+
+    <div class="login-links">
+        <a href="#">Olvidaste la contraseña</a> |
+        <a href="{{ url_for('register') }}">Crear cuenta</a>
+    </div>
+</div>
+
+<div class="social-section">
+    <center><p>Síguenos en nuestras redes</p></center>
+
+    <div class="social-icons">
+        
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/profile.php?id=100064830062888" target="_blank" class="icon facebook">
+            <svg viewBox="0 0 24 24">
+                <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.7-1.6 1.5V12H17l-.4 3h-2.8v7A10 10 0 0022 12z"/>
+            </svg>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/utngdoloreshidalgo_/" target="_blank" class="icon instagram">
+            <svg viewBox="0 0 24 24">
+                <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm4.25 5a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.25-2.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/>
+            </svg>
+        </a>
+
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@universidadtecnologicadeln6689" target="_blank" class="icon youtube">
+            <svg viewBox="0 0 24 24">
+                <path d="M23 12s0-3-1-4.5a3 3 0 00-2-2C18 5 12 5 12 5s-6 0-8 .5a3 3 0 00-2 2C1 9 1 12 1 12s0 3 1 4.5a3 3 0 002 2c2 .5 8 .5 8 .5s6 0 8-.5a3 3 0 002-2C23 15 23 12 23 12zM10 15V9l5 3-5 3z"/>
+            </svg>
+        </a>
+
+    </div>
+</div>
+
+
+
+</body>
+</html>

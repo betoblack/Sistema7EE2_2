@@ -1,0 +1,324 @@
+/* -------- GENERAL -------- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #121212;
+    color: #3b09af;
+}
+
+/* -------- NAVBAR -------- */
+nav {
+    background: linear-gradient(90deg, #880e4f, #c2185b);
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #f8bbd0;
+}
+
+/* -------- CONTENIDO -------- */
+main {
+    padding: 30px;
+}
+
+/* -------- TITULOS -------- */
+h1, h2, h3 {
+    color: #f06292;
+}
+
+/* -------- TARJETAS -------- */
+.card {
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(194, 24, 91, 0.2);
+    margin-bottom: 20px;
+}
+
+/* -------- LISTAS -------- */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #1c1c1c;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-left: 4px solid #c2185b;
+    border-radius: 5px;
+}
+
+/* -------- FORMULARIOS -------- */
+.form-card {
+    max-width: 450px;
+    margin: auto;
+    background: #1c1c1c;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(194, 24, 91, 0.35);
+    border-top: 4px solid #c2185b;
+}
+
+.form-card h2 {
+    text-align: center;
+    color: #f06292;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #ccc;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    background: #121212;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #f06292;
+    box-shadow: 0 0 6px rgba(240, 98, 146, 0.5);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(90deg, #c2185b, #f06292);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+
+/* -------- BOTONES -------- */
+button {
+    background: #c2185b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+button:hover {
+    background: #f06292;
+}
+
+/* -------- LINKS -------- */
+a {
+    color: #f06292;
+}
+
+a:hover {
+    color: #f8bbd0;
+}
+
+/* -------- ENCABEZADO -------- */
+.header {
+    padding: 25px 20px;
+    background: radial-gradient(circle, #1e1e1e, #121212);
+    border-bottom: 2px solid #c2185b;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* LOGO CIRCULAR */
+.header img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #c2185b;
+    box-shadow: 0 0 12px rgba(194, 24, 91, 0.5);
+}
+
+/* TEXTO */
+.header-text h1 {
+    margin: 0;
+    color: #f06292;
+    font-size: 26px;
+}
+
+.header-text p {
+    margin: 4px 0 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+/* -------- TARJETAS HORIZONTALES -------- */
+.card-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-row img{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #c2185b;
+    box-shadow: 0 0 12px rgba(194, 24, 91, 0.5);
+}
+
+.mini-card {
+    background: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 220px;
+    text-align: center;
+    border-top: 3px solid #c2185b;
+    box-shadow: 0 0 10px rgba(194, 24, 91, 0.25);
+    transition: 0.3s;
+}
+
+.mini-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 18px rgba(240, 98, 146, 0.5);
+}
+
+.mini-card h3 {
+    margin: 0;
+    color: #f06292;
+}
+
+.mini-card p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+/* -------- TABLAS -------- */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.styled-table thead {
+    background: #c2185b;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+.styled-table th {
+    color: white;
+    font-weight: bold;
+}
+
+.styled-table tbody tr {
+    background: #1c1c1c;
+    border-bottom: 1px solid #333;
+}
+
+.styled-table tbody tr:hover {
+    background: #2a2a2a;
+}
+
+/* -------- ROLES -------- */
+.rol {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.rol.admin {
+    background: #c2185b;
+    color: white;
+}
+
+.rol.alumno {
+    background: #3949ab;
+    color: white;
+}
+
+.rol.maestro {
+    background: #2e7d32;
+    color: white;
+}
+
+/* -------- ESTADOS -------- */
+.estado {
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.estado.activo {
+    background: #c2185b;
+    color: white;
+}
+
+/* -------- GEOLOCALIZACION -------- */
+.geo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.geo-json {
+    background: #0f0f0f;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 14px;
+    overflow-x: auto;
+    color: #f1f1f1;
+    line-height: 1.5;
+}
+
+/* -------- PAGOS -------- */
+#paypal-button-container {
+    margin-top: 16px;
+}
+
+.pago-status {
+    margin-top: 12px;
+    font-weight: 600;
+    min-height: 20px;
+}

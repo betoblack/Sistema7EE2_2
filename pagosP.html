@@ -1,0 +1,180 @@
+{% extends "profesor.html" %}
+
+{% block content %}
+<div class="card">
+    <h2>Pagos de Multas (Atraso / Perdida)</h2>
+    {% if not paypal_configured %}
+    <p style="color:#ff8080;">
+        PayPal no esta configurado. Define <code>PAYPAL_CLIENT_ID</code> y <code>PAYPAL_CLIENT_SECRET</code>.
+    </p>
+    {% else %}
+    <p>Modo: <strong>{{ paypal_mode|upper }}</strong> | Moneda: <strong>{{ paypal_currency }}</strong></p>
+    {% endif %}
+</div>
+
+<div class="form-card">
+    <h2>Generar Cobro</h2>
+    <form id="pagoForm" onsubmit="return false;">
+        <div class="form-group">
+            <label>Usuario</label>
+            <select id="usuario_id" required>
+                <option value="">Selecciona un usuario</option>
+                {% for u in usuarios %}
+                <option value="{{ u.id }}">{{ u.nombre }} ({{ u.rol }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Prestamo relacionado (opcional)</label>
+            <select id="prestamo_id">
+                <option value="">Sin prestamo</option>
+                {% for p in prestamos %}
+                <option value="{{ p.id }}">
+                    #{{ p.id }} - {{ p.usuario }} - {{ p.material }} ({{ p.estado }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Motivo</label>
+            <select id="motivo" required>
+                <option value="">Selecciona un motivo</option>
+                <option value="atraso">Atraso en entrega</option>
+                <option value="perdida">Perdida de material</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Descripcion</label>
+            <input type="text" id="descripcion" placeholder="Detalle de la multa">
+        </div>
+
+        <div class="form-group">
+            <label>Monto ({{ paypal_currency }})</label>
+            <input type="number" id="monto" step="0.01" min="1" required>
+        </div>
+    </form>
+
+    {% if paypal_configured %}
+    <div id="paypal-button-container"></div>
+    {% else %}
+    <p style="color:#ccc;">Configura PayPal para habilitar el boton de pago.</p>
+    {% endif %}
+
+    <p id="pagoStatus" class="pago-status"></p>
+</div>
+
+<div class="card">
+    <h2>Historial de Pagos</h2>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Motivo</th>
+                <th>Descripcion</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Order ID</th>
+                <th>Capture ID</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pagos %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.usuario }}</td>
+                <td>{{ p.motivo }}</td>
+                <td>{{ p.descripcion or '-' }}</td>
+                <td>{{ p.monto }} {{ p.moneda }}</td>
+                <td>{{ p.estado }}</td>
+                <td>{{ p.paypal_order_id or '-' }}</td>
+                <td>{{ p.paypal_capture_id or '-' }}</td>
+                <td>{{ p.fecha_pago or p.fecha_creacion }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9">No hay pagos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if paypal_configured %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}&currency={{ paypal_currency }}"></script>
+<script>
+const statusEl = document.getElementById("pagoStatus");
+
+function setStatus(message, isError = false) {
+    statusEl.textContent = message;
+    statusEl.style.color = isError ? "#ff8080" : "#c8e6c9";
+}
+
+function getPayload() {
+    const usuario_id = document.getElementById("usuario_id").value;
+    const prestamo_id = document.getElementById("prestamo_id").value;
+    const motivo = document.getElementById("motivo").value;
+    const descripcion = document.getElementById("descripcion").value;
+    const monto = document.getElementById("monto").value;
+
+    if (!usuario_id || !motivo || !monto) {
+        throw new Error("Completa usuario, motivo y monto.");
+    }
+
+    return {
+        usuario_id,
+        prestamo_id,
+        motivo,
+        descripcion,
+        monto
+    };
+}
+
+paypal.Buttons({
+    createOrder: async function() {
+        try {
+            const payload = getPayload();
+            setStatus("Creando orden en PayPal...");
+            const response = await fetch("/pagos/crear-orden", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            if (!response.ok || !data.ok) {
+                throw new Error(data.error || "No se pudo crear la orden.");
+            }
+            return data.order_id;
+        } catch (error) {
+            setStatus(error.message, true);
+            throw error;
+        }
+    },
+    onApprove: async function(data) {
+        try {
+            setStatus("Capturando pago...");
+            const response = await fetch(`/pagos/capturar/${data.orderID}`, {
+                method: "POST"
+            });
+            const result = await response.json();
+            if (!response.ok || !result.ok) {
+                throw new Error(result.error || "No se pudo capturar el pago.");
+            }
+            setStatus(`Pago completado. Capture ID: ${result.capture_id || "N/A"}`);
+            setTimeout(() => window.location.reload(), 1200);
+        } catch (error) {
+            setStatus(error.message, true);
+        }
+    },
+    onError: function(err) {
+    console.error("Error PayPal:", err);
+        setStatus("Error al procesar pago con PayPal.", true);
+    }
+}).render("#paypal-button-container");
+</script>
+{% endif %}
+{% endblock %}

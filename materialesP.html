@@ -1,0 +1,47 @@
+{% extends "profesor.html" %}
+
+{% block content %}
+<h2>Materiales Disponibles</h2>
+
+<div style="margin-bottom: 30px;">
+    <h4>Video tutorial del equipo</h4>
+
+    {% if video_url %}
+    <iframe
+        width="100%"
+        height="350"
+        src="{{ video_url }}"
+        frameborder="0"
+        allowfullscreen>
+    </iframe>
+    {% endif %}
+
+    {% if video_watch_url %}
+    <p><a href="{{ video_watch_url }}" target="_blank">Abrir en YouTube</a></p>
+    {% else %}
+    <p>No se encontró un video embebible. Ábrelo directamente en YouTube.</p>
+    {% endif %}
+</div>
+
+
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in materiales %}
+        <tr>
+            <td>{{ m.nombre }}</td>
+            <td>{{ m.descripcion }}</td>
+            <td>{{ m.cantidad }}</td>
+            <td>{{ m.estado }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

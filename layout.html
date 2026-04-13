@@ -1,0 +1,45 @@
+﻿{% extends "alumno.html" %}
+
+{% block content %}
+
+<div class="card">
+    <h2>Encargados del Área</h2>
+
+    <div class="card-row">
+        <div class="mini-card">
+            <h3>Encargado 1</h3>
+            <p>Área de Materiales</p>
+        </div>
+
+        <div class="mini-card">
+            <h3>Encargado 2</h3>
+            <p>Área de Control</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Creadores del Sistema</h2>
+
+    <div class="card-row">
+        <div class="mini-card">
+            <img src="{{ url_for('static', filename='img/Jorge.png') }}" width="50">
+            <h3>Jorge Alberto</h3>
+            <p>Desarrollador</p>
+        </div>
+
+        <div class="mini-card">
+            <img src="{{ url_for('static', filename='img/David.jpeg') }}" width="50">
+            <h3>Diego David</h3>
+            <p>Desarrollador</p>
+        </div>
+
+        <div class="mini-card">
+            <img src="{{ url_for('static', filename='img/Cristian.jpeg') }}" width="50">
+            <h3>Cristian Uriel</h3>
+            <p>Desarrollador</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

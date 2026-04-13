@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Cuenta</title>
+
+    <style>
+        body {
+            height: 100vh;
+            background: linear-gradient(-45deg, 
+                #00FF7F,   /* Verde Primavera */
+                #3D8B74,   /* Juniper */
+                #3D8B74,
+                #001F3F,
+                #001F3F,   /* Azul Marino */
+                #a0e8be    /* Verde complementario suave */
+            );
+            background-size: 400% 400%;
+            animation: gradientMove 30s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 220px;
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 420px;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .back a {
+            text-decoration: none;
+            color: #667eea;
+            font-size: 14px;
+        }
+
+        .back a:hover {
+            text-decoration: underline;
+        }
+
+        .partelogo img {
+            width: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            animation: floatLogo 1.5s ease-in-out infinite;
+        }
+
+        @keyframes floatLogo {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotate(3deg);
+            }
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Crear Cuenta</h2>
+
+        <form action="{{ url_for('register_user') }}" method="POST">
+
+            <label>Correo</label>
+            <input type="text" name="correo" required>
+
+            <label>Contraseña</label>
+            <input type="password" name="password" required>
+
+            <label>Rol</label>
+            <select name="rol">
+                <option value="alumno">Alumno</option>
+                <option value="profesor">Profesor</option>
+            </select>
+
+            <button type="submit">Registrarse</button>
+        </form>
+
+        <div class="back">
+            <a href="/">Volver al inicio</a>
+        </div>
+    </div>
+
+    <div class="partelogo">
+        <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="Logo Universidad" width="210px">
+    </div>
+
+</body>
+</html>

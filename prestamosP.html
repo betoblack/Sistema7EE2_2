@@ -1,0 +1,78 @@
+{% extends "profesor.html" %}
+
+{% block content %}
+<div class="form-card">
+    <h2>Registrar Préstamo</h2>
+
+    {% if error %}
+    <p style="color:#ff8080; text-align:center;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('guardar_prestamoP') }}">
+        <div class="form-group">
+            <label>Usuario</label>
+            <select name="usuario_id" required>
+                <option value="">Seleccione un usuario</option>
+                {% for u in usuarios %}
+                <option value="{{ u.id }}">
+                    {{ u.nombre }} ({{ u.rol }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Material</label>
+            <select name="material_id" required>
+                <option value="">Seleccione un material</option>
+                {% for m in materiales %}
+                <option value="{{ m.id }}">
+                    {{ m.nombre }} - Stock: {{ m.cantidad }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Cantidad</label>
+            <input type="number" name="cantidad" min="1" required>
+        </div>
+
+        <button type="submit" class="btn-primary">
+            Registrar Préstamo
+        </button>
+    </form>
+</div>
+
+<br>
+<div class="card">
+    <h2>Préstamos Activos</h2>
+
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Material</th>
+                <th>Cantidad</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in prestamosP %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.usuario }}</td>
+                <td>{{ p.material }}</td>
+                <td>{{ p.cantidad }}</td>
+                <td>{{ p.fecha }}</td>
+                <td>
+                    <span class="estado activo">{{ p.estado }}</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

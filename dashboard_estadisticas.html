@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* TARJETAS */
+
+        .cards {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .card {
+            flex: 1;
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .card h2 {
+            font-size: 35px;
+        }
+
+        .card p {
+            font-size: 18px;
+        }
+
+        .prestamos {
+            background: #3498db;
+        }
+
+        .pagos {
+            background: #2ecc71;
+        }
+
+        .exportar {
+            background: #9b59b6;
+        }
+
+        .importar {
+            background: #e67e22;
+        }
+
+        /* BOTONES */
+
+        .card button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* GRAFICA */
+
+        .chart-container {
+            width: 70%;
+            margin: 40px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="{{ url_for('alumno') }}">Atras</a>
+    </nav>
+
+    <div class="container">
+
+        <h1>Dashboard Estadísticas</h1>
+
+        <div class="cards">
+
+            <div class="card prestamos">
+                <h2>{{ prestamos }}</h2>
+                <p>Total Préstamos</p>
+            </div>
+
+            <div class="card pagos">
+                <h2>$ {{ pagos }}</h2>
+                <p>Total Pagos</p>
+            </div>
+
+            <div class="card exportar">
+                <p>Exportar Datos</p>
+                <button onclick="exportar()">Exportar Excel</button>
+            </div>
+
+            <div class="card importar">
+                <p>Importar Datos</p>
+                <form action="/importar_materiales" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="archivo" required>
+                    <button type="submit">Subir</button>
+                </form>
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+            <canvas id="graficaMateriales"></canvas>
+        </div>
+
+
+        <h2>Ranking Materiales</h2>
+
+        <table>
+            <tr>
+                <th>Material</th>
+                <th>Veces Prestado</th>
+            </tr>
+
+            {% for r in ranking %}
+            <tr>
+                <td>{{ r[0] }}</td>
+                <td>{{ r[1] }}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <div id="ranking-data" data-ranking='{{ ranking|tojson }}'></div>
+
+    <script>
+    const rankingData = JSON.parse(
+        document.getElementById("ranking-data").dataset.ranking
+    );
+
+    const materiales = rankingData.map(r => r[0]);
+    const cantidades = rankingData.map(r => r[1]);
+
+    new Chart(document.getElementById("graficaMateriales"), {
+        type: "bar",
+        data: {
+        labels: materiales,
+        datasets: [{
+            label: "Materiales más solicitados",
+            data: cantidades
+        }]
+        },
+        options: { responsive: true }
+    });
+
+    function exportar() {
+        window.location.href = "/exportar_excel";
+    }
+    </script>
+
+
+</body>
+
+</html>
