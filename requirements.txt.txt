@@ -1,1 +1,1 @@
-pip install flask gunicorn pandas openpyxl python-dotenv authlib google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2 pyodbc sqlalchemy
+pip install flask gunicorn 
