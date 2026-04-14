@@ -1,2 +1,5 @@
 flask
 gunicorn
+authlib
+requests
+python-dotenv
