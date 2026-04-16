@@ -3,3 +3,6 @@ gunicorn
 authlib
 requests
 python-dotenv
+pandas
+openpyxl
+google-api-python-client
